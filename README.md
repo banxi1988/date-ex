@@ -15,14 +15,14 @@ A Set of Utility extension method for Date class
 
 ```js
 require("date-ex");
-new Date(2018, 5, 11).dateByAddingDays(2).toISODateString(); // return 2018-06-12
+new Date(2018, 5, 11).dateByAddingDays(2).toISODateString(); // return 2018-06-13
 ```
 
 ### TypeScript
 
 ```ts
 import "date-ex";
-new Date(2018, 5, 11).dateByAddingDays(2).toISODateString(); // return 2018-06-12
+new Date(2018, 5, 11).dateByAddingDays(2).toISODateString(); // return 2018-06-13
 ```
 
 ### Full check api list
