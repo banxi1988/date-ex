@@ -67,6 +67,11 @@ declare global {
     isToday(): boolean;
 
     /**
+     * 判断是否是昨天
+     */
+    isYesterday():boolean;
+
+    /**
      * 返回类似 2018-06-03 格式的日期字符串
      */
     toISODateString(): string;
@@ -137,6 +142,11 @@ Date.prototype.isSameDate = function(other: Date): boolean {
 
 Date.prototype.isToday = function(): boolean {
   return new Date().isSameDate(this);
+};
+
+Date.prototype.isYesterday = function(): boolean {
+  const yesterday = new Date().dateByAddingDays(-1)
+  return this.isSameDate(yesterday);
 };
 
 /**

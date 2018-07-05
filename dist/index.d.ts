@@ -7,9 +7,9 @@ export declare const enum TimeUnit {
     millisOfMinute = 60000,
     millisOfHour = 3600000,
     millisOfDay = 86400000,
-    millisOfWeek = 604800000,
+    millisOfWeek = 604800000
 }
-declare global  {
+declare global {
     interface Date {
         /**
          * 返回当前日期增加指定毫秒数后的日期
@@ -62,6 +62,10 @@ declare global  {
          * 判断是否是今天
          */
         isToday(): boolean;
+        /**
+         * 判断是否是昨天
+         */
+        isYesterday(): boolean;
         /**
          * 返回类似 2018-06-03 格式的日期字符串
          */

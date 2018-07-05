@@ -44,6 +44,10 @@ Date.prototype.isSameDate = function (other) {
 Date.prototype.isToday = function () {
     return new Date().isSameDate(this);
 };
+Date.prototype.isYesterday = function () {
+    var yesterday = new Date().dateByAddingDays(-1);
+    return this.isSameDate(yesterday);
+};
 /**
  * 一月返回1， 8 月返回 8
  */

@@ -158,4 +158,14 @@ describe("测试日期判断的扩展函数", () => {
     assert.isTrue(new Date().isToday());
     assert.isFalse(new Date(2018, 6, 3).isToday());
   });
+
+  it("isYesterday", () => {
+    const d1 = new Date();
+    assert.isFalse(d1.isYesterday(), "now was not yesterday");
+    const d2 = new Date().dateByAddingDays(-1);
+    assert.isTrue(d2.isYesterday());
+
+    const d3 = new Date().dateByAddingDays(1);
+    assert.isFalse(d3.isYesterday());
+  });
 });
