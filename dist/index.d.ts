@@ -59,6 +59,10 @@ declare global  {
          */
         isSameDate(other: Date): boolean;
         /**
+         * 判断是否是今天
+         */
+        isToday(): boolean;
+        /**
          * 返回类似 2018-06-03 格式的日期字符串
          */
         toISODateString(): string;

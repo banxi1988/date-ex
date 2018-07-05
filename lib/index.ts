@@ -62,6 +62,11 @@ declare global {
     isSameDate(other: Date): boolean;
 
     /**
+     * 判断是否是今天
+     */
+    isToday(): boolean;
+
+    /**
      * 返回类似 2018-06-03 格式的日期字符串
      */
     toISODateString(): string;
@@ -128,6 +133,10 @@ Date.prototype.isSameDate = function(other: Date): boolean {
     this.getMonth() == other.getMonth() &&
     this.getDate() == other.getDate()
   );
+};
+
+Date.prototype.isToday = function(): boolean {
+  return new Date().isSameDate(this);
 };
 
 /**

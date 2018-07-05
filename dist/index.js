@@ -41,6 +41,9 @@ Date.prototype.isSameDate = function (other) {
         this.getMonth() == other.getMonth() &&
         this.getDate() == other.getDate());
 };
+Date.prototype.isToday = function () {
+    return new Date().isSameDate(this);
+};
 /**
  * 一月返回1， 8 月返回 8
  */

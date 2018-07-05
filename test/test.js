@@ -155,5 +155,7 @@ describe("测试日期判断的扩展函数", () => {
     assert.isTrue(d1.isSameDate(d2));
     assert.isFalse(d1.isSameDate(d3));
     assert.isTrue(Date.today().isSameDate(new Date()));
+    assert.isTrue(new Date().isToday());
+    assert.isFalse(new Date(2018, 6, 3).isToday());
   });
 });
