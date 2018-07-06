@@ -1,6 +1,6 @@
 {
   "name": "date-ex",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Some Untility Date methods",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
