@@ -166,6 +166,38 @@ exports.padNumber = padNumber;
 Date.prototype.toISODateTimeString = function () {
     return this.toISODateString() + " " + this.toISOTimeString();
 };
+Date.prototype.toRelativeDateTimeString = function () {
+    var date = this;
+    var today = new Date();
+    var currentTimeStamp = today.getTime() / 1000;
+    var dataTimeStamp = date.getTime() / 1000;
+    var secondsToNow = Math.floor(Math.abs(currentTimeStamp - dataTimeStamp));
+    if (secondsToNow < 60) {
+        return "刚刚";
+    }
+    else if (secondsToNow < 300) {
+        return Math.floor(secondsToNow / 60) + "分钟前";
+    }
+    else {
+        if (today.isSameDate(date)) {
+            return date.getHourMinuteString();
+        }
+        else if (today.isSameDate(date.dateByAddingDays(1))) {
+            return "昨天 " + date.getHourMinuteString();
+        }
+        else if (today.getFullYear() == date.getFullYear()) {
+            return (padNumber(date.getRealMonth()) +
+                "/" +
+                padNumber(date.getDate()) +
+                " " +
+                date.getHourMinuteString());
+        }
+        else {
+            var str = date.toISODateTimeString();
+            return str.substring(0, str.length - 3);
+        }
+    }
+};
 Date.today = function () {
     return new Date();
 };

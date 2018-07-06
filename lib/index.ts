@@ -142,6 +142,11 @@ declare global {
      * 返回时分秒为0的对应日期
      */
     toZeroTimeDate(): Date;
+
+    /**
+     * 返回类似微信风格相对时间字符串
+     */
+    toRelativeDateTimeString(): string;
   }
 
   interface DateConstructor {
@@ -311,6 +316,37 @@ export function padNumber(num: number): string {
 
 Date.prototype.toISODateTimeString = function(): string {
   return this.toISODateString() + " " + this.toISOTimeString();
+};
+
+Date.prototype.toRelativeDateTimeString = function(): string {
+  const date = this;
+  const today = new Date();
+  const currentTimeStamp = today.getTime() / 1000;
+  const dataTimeStamp = date.getTime() / 1000;
+  const secondsToNow = Math.floor(Math.abs(currentTimeStamp - dataTimeStamp));
+
+  if (secondsToNow < 60) {
+    return "刚刚";
+  } else if (secondsToNow < 300) {
+    return Math.floor(secondsToNow / 60) + "分钟前";
+  } else {
+    if (today.isSameDate(date)) {
+      return date.getHourMinuteString();
+    } else if (today.isSameDate(date.dateByAddingDays(1))) {
+      return "昨天 " + date.getHourMinuteString();
+    } else if (today.getFullYear() == date.getFullYear()) {
+      return (
+        padNumber(date.getRealMonth()) +
+        "/" +
+        padNumber(date.getDate()) +
+        " " +
+        date.getHourMinuteString()
+      );
+    } else {
+      const str = date.toISODateTimeString();
+      return str.substring(0, str.length - 3);
+    }
+  }
 };
 
 Date.today = function() {

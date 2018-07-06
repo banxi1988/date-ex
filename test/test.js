@@ -299,3 +299,66 @@ describe("测试 isLeapYear 判断函数", () => {
     assert.isTrue(isLeapYear(1600));
   });
 });
+
+describe("测试相对时间转换函数", () => {
+  const now = new Date();
+  it("[0s，60s） 间隔区间,刚刚 ", () => {
+    assert.strictEqual(now.toRelativeDateTimeString(), "刚刚");
+    const d1 = now.dateByAddingSeconds(30);
+    assert.strictEqual(d1.toRelativeDateTimeString(), "刚刚");
+    const d2 = now.dateByAddingSeconds(-59);
+    assert.strictEqual(d2.toRelativeDateTimeString(), "刚刚");
+    const d3 = now.dateByAddingSeconds(-60);
+    assert.strictEqual(d3.toRelativeDateTimeString(), "1分钟前");
+  });
+  it("[60s,300s) 间隔区间，几分钟前", () => {
+    const d1 = now.dateByAddingSeconds(-59);
+    assert.strictEqual(d1.toRelativeDateTimeString(), "刚刚");
+    const d2 = now.dateByAddingSeconds(-60);
+    assert.strictEqual(d2.toRelativeDateTimeString(), "1分钟前");
+    const d3 = now.dateByAddingSeconds(-240);
+    assert.strictEqual(d3.toRelativeDateTimeString(), "4分钟前");
+    const d4 = now.dateByAddingSeconds(-300);
+    const d5 = now.dateByAddingMinutes(-5);
+    assert.strictEqual(d4.toRelativeDateTimeString(), d5.getHourMinuteString());
+    const d6 = now.dateByAddingSeconds(-301);
+    const d7 = now.dateByAddingMinutes(-5);
+    assert.strictEqual(d6.toRelativeDateTimeString(), d7.getHourMinuteString());
+    const d8 = now.dateByAddingMinutes(-3);
+    assert.strictEqual(d8.toRelativeDateTimeString(), "3分钟前");
+  });
+  it("[300s,24h)", () => {
+    const d1 = now.dateByAddingMinutes(-6);
+    if (d1.isSameDate(now)) {
+      assert.strictEqual(
+        d1.toRelativeDateTimeString(),
+        d1.getHourMinuteString()
+      );
+    } else {
+      assert.strictEqual(
+        d1.toRelativeDateTimeString(),
+        "昨天 " + d1.getHourMinuteString()
+      );
+    }
+  });
+  it("昨天", () => {
+    const d1 = now.dateByAddingDays(-1);
+    assert.strictEqual(
+      d1.toRelativeDateTimeString(),
+      "昨天 " + d1.getHourMinuteString()
+    );
+  });
+  it("今年内", () => {
+    const d1 = now.dateByAddingDays(-3);
+    if (d1.getFullYear() == now.getFullYear()) {
+      assert.strictEqual(
+        d1.toRelativeDateTimeString().length,
+        "07/02 15:20".length
+      );
+    }
+  });
+  it("很久以前", () => {
+    const d3 = new Date("2017-07-22T07:20:00Z");
+    assert.strictEqual(d3.toRelativeDateTimeString(), "2017-07-22 15:20");
+  });
+});

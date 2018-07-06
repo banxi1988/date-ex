@@ -113,6 +113,10 @@ declare global {
          * 返回时分秒为0的对应日期
          */
         toZeroTimeDate(): Date;
+        /**
+         * 返回类似微信风格相对时间字符串
+         */
+        toRelativeDateTimeString(): string;
     }
     interface DateConstructor {
         today(): Date;
