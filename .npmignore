@@ -1,0 +1,8 @@
+.vscode
+yarn.lock
+.travis.yml
+package-lock.json
+publish.sh
+.gitignore
+node_modules/
+coverage/
