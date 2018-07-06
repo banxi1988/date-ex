@@ -169,3 +169,15 @@ describe("测试日期判断的扩展函数", () => {
     assert.isFalse(d3.isYesterday());
   });
 });
+
+describe("测试 padNumber 函数", () => {
+  it("padNumber", () => {
+    assert.strictEqual(padNumber(3), "03");
+    assert.strictEqual(padNumber(23), "23");
+    assert.strictEqual(padNumber(0), "00");
+    assert.strictEqual(padNumber(3.4), "03");
+    assert.strictEqual(padNumber(3.6), "04");
+    assert.strictEqual(padNumber(-3.4), "-3");
+    assert.strictEqual(padNumber(-3.6), "-4");
+  });
+});

@@ -84,4 +84,10 @@ declare global {
         create(year: number, realMonth: number, day: number, hours: number, minutes: number, seconds: number, milliseconds: number): Date;
     }
 }
+/**
+ * 为个位数数字补充前缀 0,(负数除外),小数部分将舍去
+ *
+ * @param num 整数(小数将被 round)
+ * @returns  3 -> "03",  12 -> "12", "3.4" -> "03", "-3" -> "-3"
+ */
 export declare function padNumber(num: number): string;

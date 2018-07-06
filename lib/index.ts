@@ -69,7 +69,7 @@ declare global {
     /**
      * 判断是否是昨天
      */
-    isYesterday():boolean;
+    isYesterday(): boolean;
 
     /**
      * 返回类似 2018-06-03 格式的日期字符串
@@ -145,7 +145,7 @@ Date.prototype.isToday = function(): boolean {
 };
 
 Date.prototype.isYesterday = function(): boolean {
-  const yesterday = new Date().dateByAddingDays(-1)
+  const yesterday = new Date().dateByAddingDays(-1);
   return this.isSameDate(yesterday);
 };
 
@@ -171,8 +171,15 @@ Date.prototype.toISOTimeString = function(): string {
   return padNumber(hour) + ":" + padNumber(minute) + ":" + padNumber(second);
 };
 
+/**
+ * 为个位数数字补充前缀 0,(负数除外),小数部分将舍去
+ *
+ * @param num 整数(小数将被 round)
+ * @returns  3 -> "03",  12 -> "12", "3.4" -> "03", "-3" -> "-3"
+ */
 export function padNumber(num: number): string {
-  if (num < 10) {
+  num = Math.round(num);
+  if (num < 10 && num >= 0) {
     return "0" + num;
   } else {
     return num + "";
