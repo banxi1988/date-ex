@@ -9,6 +9,11 @@ export declare const enum TimeUnit {
     millisOfDay = 86400000,
     millisOfWeek = 604800000
 }
+/**
+ * 判断年份是否是闰年
+ * @param year 年份
+ */
+export declare function isLeapYear(year: number): boolean;
 declare global {
     interface Date {
         /**
@@ -54,10 +59,36 @@ declare global {
          */
         getHourMinuteString(): string;
         /**
-         * 判断跟另外一天是否是同一天
-         * @param other 另一天
+         * 返回 iOS 的星期值即，周一返回 1， 周日返回 7
+         */
+        getISOWeekday(): number;
+        /**
+         * 判断跟另外一个日期是否是同一天
+         * @param other 另一个日期对象
          */
         isSameDate(other: Date): boolean;
+        /**
+         * 判断跟另外一个日期是否是同一年
+         * @param other 另一个日期对象
+         */
+        isSameYear(other: Date): boolean;
+        /**
+         * 判断是否是闰年
+         */
+        isLeapYear(): boolean;
+        /**
+         * 返回对应日期是一年中的第几天 返回 1 到 365 或 1 到 366 （如果是闰年）的数字
+         */
+        getDayOfYear(): number;
+        /**
+         * 返回日期在所在年的第几周，一年的一月总应该算是第一周
+         */
+        getWeekOfYear(): number;
+        /**
+         * 判断跟另外一个日期是否是同一周
+         * @param other 另一个日期对象
+         */
+        isSameWeek(other: Date): boolean;
         /**
          * 判断是否是今天
          */
@@ -78,6 +109,10 @@ declare global {
          * 返回类似 2018-06-03 16:03:42 格式的时间字符串
          */
         toISODateTimeString(): string;
+        /**
+         * 返回时分秒为0的对应日期
+         */
+        toZeroTimeDate(): Date;
     }
     interface DateConstructor {
         today(): Date;

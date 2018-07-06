@@ -1,6 +1,6 @@
 "use strict";
 const { assert } = require("chai");
-const { padNumber } = require("../dist/index.js");
+const { padNumber, isLeapYear } = require("../dist/index.js");
 
 describe("测试 Date 创建类扩展函数", () => {
   it("ceate", () => {
@@ -163,6 +163,25 @@ describe("测试格式化类 日期扩展函数", () => {
 });
 
 describe("测试日期判断的扩展函数", () => {
+  it("isSameYear", () => {
+    const d1 = new Date();
+    const d2 = new Date();
+    assert.isTrue(d1.isSameYear(d2));
+
+    const d3 = Date.create(2018, 6, 1);
+    const d4 = Date.create(2019, 1, 1);
+    assert.isFalse(d3.isSameYear(d4));
+  });
+
+  it("isSameDate", () => {
+    assert.isTrue(new Date().isSameDate(new Date()));
+    const d3 = Date.create(2018, 6, 1);
+    const d4 = Date.create(2018, 6, 0);
+    assert.isFalse(d3.isSameDate(d4));
+  });
+
+  it("isSameWeek", () => {});
+
   it("isToday", () => {
     const d1 = Date.create(2018, 6, 1);
     const d2 = Date.create(2018, 6, 1);
@@ -183,6 +202,62 @@ describe("测试日期判断的扩展函数", () => {
     const d3 = new Date().dateByAddingDays(1);
     assert.isFalse(d3.isYesterday());
   });
+
+  it("isSameWeek", () => {
+    const d1 = Date.create(2018, 7, 2);
+    const d2 = Date.create(2018, 7, 7);
+    const d3 = Date.create(2018, 7, 9);
+    assert.isTrue(d1.isSameWeek(d2));
+    assert.isFalse(d1.isSameWeek(d3));
+
+    // 跨年
+    const d5 = Date.create(2018, 12, 31); // 周一
+    const d6 = Date.create(2019, 1, 1); // 周二
+    const d7 = Date.create(2019, 1, 6); // 周日
+    const d8 = Date.create(2019, 1, 7); //  下周一
+    assert.isTrue(d5.isSameWeek(d6));
+    assert.isTrue(d5.isSameWeek(d7));
+    assert.isFalse(d5.isSameWeek(d8));
+  });
+});
+
+describe("测试其他扩展属性", () => {
+  it("getISOWeekday", () => {
+    const d1 = Date.create(2018, 7, 6);
+    assert.strictEqual(5, d1.getISOWeekday());
+    const d2 = Date.create(2018, 7, 7);
+    assert.strictEqual(6, d2.getISOWeekday());
+    const d3 = Date.create(2018, 7, 8);
+    assert.strictEqual(7, d3.getISOWeekday());
+    const d4 = Date.create(2018, 7, 9);
+    assert.strictEqual(1, d4.getISOWeekday());
+  });
+
+  it("getDayOfYear", () => {
+    const d1 = Date.create(2018, 1, 1);
+    assert.strictEqual(d1.getDayOfYear(), 1);
+    const d2 = Date.create(2018, 1, 7);
+    assert.strictEqual(d2.getDayOfYear(), 7);
+    const d3 = Date.create(2018, 2, 7);
+    assert.strictEqual(d3.getDayOfYear(), 38);
+  });
+
+  it("getWeekOfYear", () => {
+    const d1 = Date.create(2018, 1, 1);
+    assert.strictEqual(d1.getWeekOfYear(), 1);
+    const d2 = Date.create(2018, 1, 8);
+    assert.strictEqual(d2.getWeekOfYear(), 2);
+    const d3 = Date.create(2018, 1, 13);
+    assert.strictEqual(d3.getWeekOfYear(), 2);
+    const d4 = Date.create(2018, 1, 14, 12);
+    assert.strictEqual(d4.getWeekOfYear(), 2);
+    const d5 = Date.create(2018, 1, 15);
+    assert.strictEqual(d5.getWeekOfYear(), 3);
+    const d6 = Date.create(2018, 1, 21);
+    assert.strictEqual(d6.getWeekOfYear(), 3);
+    const d7 = Date.create(2018, 1, 22);
+    assert.strictEqual(d7.getWeekOfYear(), 4);
+  });
 });
 
 describe("测试 padNumber 函数", () => {
@@ -194,5 +269,33 @@ describe("测试 padNumber 函数", () => {
     assert.strictEqual(padNumber(3.6), "04");
     assert.strictEqual(padNumber(-3.4), "-3");
     assert.strictEqual(padNumber(-3.6), "-4");
+  });
+});
+
+describe("测试 isLeapYear 判断函数", () => {
+  it("isLeepYear", () => {
+    assert.isFalse(isLeapYear(1977));
+    assert.isFalse(isLeapYear(1978));
+    assert.isFalse(isLeapYear(1982));
+    assert.isFalse(isLeapYear(1994));
+    assert.isTrue(isLeapYear(1980));
+    assert.isTrue(isLeapYear(1984));
+    assert.isTrue(isLeapYear(1988));
+    assert.isTrue(isLeapYear(1992));
+    assert.isTrue(isLeapYear(1996));
+    assert.isTrue(isLeapYear(2000));
+    assert.isTrue(isLeapYear(2004));
+    assert.isTrue(isLeapYear(2008));
+    assert.isTrue(isLeapYear(2012));
+    assert.isTrue(isLeapYear(2016));
+    assert.isTrue(isLeapYear(2020));
+    assert.isTrue(isLeapYear(2024));
+    assert.isFalse(isLeapYear(1700));
+    assert.isFalse(isLeapYear(1800));
+    assert.isFalse(isLeapYear(1900));
+    assert.isFalse(isLeapYear(2100));
+    assert.isFalse(isLeapYear(2200));
+    assert.isFalse(isLeapYear(2300));
+    assert.isTrue(isLeapYear(1600));
   });
 });

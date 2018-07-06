@@ -10,6 +10,25 @@ export const enum TimeUnit {
   millisOfWeek = millisOfDay * 7
 }
 
+/**
+ * 判断年份是否是闰年
+ * @param year 年份
+ */
+export function isLeapYear(year: number) {
+  year = Math.floor(year);
+  if (year % 4 !== 0) {
+    return false;
+  } else if (year % 100 !== 0) {
+    return true;
+  } else if (year % 400 !== 0) {
+    return false;
+  } else if (year % 3200 === 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 declare global {
   interface Date {
     /**
@@ -55,11 +74,45 @@ declare global {
      * 返回 16:03 格式的月份日期字符串
      */
     getHourMinuteString(): string;
+
     /**
-     * 判断跟另外一天是否是同一天
-     * @param other 另一天
+     * 返回 iOS 的星期值即，周一返回 1， 周日返回 7
+     */
+    getISOWeekday(): number;
+
+    // getRelativeDateTimeString():string;
+    /**
+     * 判断跟另外一个日期是否是同一天
+     * @param other 另一个日期对象
      */
     isSameDate(other: Date): boolean;
+
+    /**
+     * 判断跟另外一个日期是否是同一年
+     * @param other 另一个日期对象
+     */
+    isSameYear(other: Date): boolean;
+
+    /**
+     * 判断是否是闰年
+     */
+    isLeapYear(): boolean;
+
+    /**
+     * 返回对应日期是一年中的第几天 返回 1 到 365 或 1 到 366 （如果是闰年）的数字
+     */
+    getDayOfYear(): number;
+
+    /**
+     * 返回日期在所在年的第几周，一年的一月总应该算是第一周
+     */
+    getWeekOfYear(): number;
+
+    /**
+     * 判断跟另外一个日期是否是同一周
+     * @param other 另一个日期对象
+     */
+    isSameWeek(other: Date): boolean;
 
     /**
      * 判断是否是今天
@@ -84,6 +137,11 @@ declare global {
      * 返回类似 2018-06-03 16:03:42 格式的时间字符串
      */
     toISODateTimeString(): string;
+
+    /**
+     * 返回时分秒为0的对应日期
+     */
+    toZeroTimeDate(): Date;
   }
 
   interface DateConstructor {
@@ -140,6 +198,67 @@ Date.prototype.isSameDate = function(other: Date): boolean {
   );
 };
 
+Date.prototype.isSameYear = function(other: Date): boolean {
+  return this.getFullYear() == other.getFullYear();
+};
+
+Date.prototype.getISOWeekday = function(): number {
+  const day = this.getDay();
+  return day === 0 ? 7 : day;
+};
+
+Date.prototype.getDayOfYear = function(): number {
+  const commonYearMonthIndexDayOfYearMap = [
+    0,
+    31,
+    59,
+    90,
+    120,
+    151,
+    181,
+    212,
+    243,
+    273,
+    274,
+    304,
+    334
+  ];
+  // const leapYearMonthDayOfYearMap =[0,31,60,91,121,152,182,213,244,274,274,305,335]
+  const monthIndex = this.getMonth();
+  const date = this.getDate();
+  const ordinalDay = commonYearMonthIndexDayOfYearMap[monthIndex];
+  if (this.isLeapYear() && monthIndex > 0) {
+    return ordinalDay + 1 + date;
+  } else {
+    return ordinalDay + date;
+  }
+};
+
+declare var console: any;
+
+Date.prototype.getWeekOfYear = function(): number {
+  const ordinalDay = this.getDayOfYear();
+  const weekday = this.getISOWeekday();
+  const adjustDay = ordinalDay - weekday + 10;
+  const week = adjustDay / 7;
+  // if week < 1; it's last year
+  // if week > 53; maybe it's next year
+  return Math.floor(week);
+};
+
+Date.prototype.toZeroTimeDate = function() {
+  return new Date(this.getFullYear(), this.getMonth(), this.getDate());
+};
+
+Date.prototype.isSameWeek = function(other: Date): boolean {
+  let d1 = this.toZeroTimeDate();
+  let weekday = this.getISOWeekday();
+  let monday = d1.dateByAddingDays(1 - weekday);
+  let nextMonday = d1.dateByAddingDays(7 - weekday + 1);
+  let time = other.getTime();
+  return time > monday.getTime() && time < nextMonday.getTime();
+};
+
 Date.prototype.isToday = function(): boolean {
   return new Date().isSameDate(this);
 };
@@ -147,6 +266,10 @@ Date.prototype.isToday = function(): boolean {
 Date.prototype.isYesterday = function(): boolean {
   const yesterday = new Date().dateByAddingDays(-1);
   return this.isSameDate(yesterday);
+};
+
+Date.prototype.isLeapYear = function(): boolean {
+  return isLeapYear(this.getFullYear());
 };
 
 /**

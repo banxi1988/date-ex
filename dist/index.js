@@ -1,5 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * 判断年份是否是闰年
+ * @param year 年份
+ */
+function isLeapYear(year) {
+    year = Math.floor(year);
+    if (year % 4 !== 0) {
+        return false;
+    }
+    else if (year % 100 !== 0) {
+        return true;
+    }
+    else if (year % 400 !== 0) {
+        return false;
+    }
+    else if (year % 3200 === 0) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+exports.isLeapYear = isLeapYear;
 Date.prototype.dateByAddingMillis = function (millis) {
     if (millis === void 0) { millis = 1; }
     var time = this.getTime();
@@ -41,12 +64,69 @@ Date.prototype.isSameDate = function (other) {
         this.getMonth() == other.getMonth() &&
         this.getDate() == other.getDate());
 };
+Date.prototype.isSameYear = function (other) {
+    return this.getFullYear() == other.getFullYear();
+};
+Date.prototype.getISOWeekday = function () {
+    var day = this.getDay();
+    return day === 0 ? 7 : day;
+};
+Date.prototype.getDayOfYear = function () {
+    var commonYearMonthIndexDayOfYearMap = [
+        0,
+        31,
+        59,
+        90,
+        120,
+        151,
+        181,
+        212,
+        243,
+        273,
+        274,
+        304,
+        334
+    ];
+    // const leapYearMonthDayOfYearMap =[0,31,60,91,121,152,182,213,244,274,274,305,335]
+    var monthIndex = this.getMonth();
+    var date = this.getDate();
+    var ordinalDay = commonYearMonthIndexDayOfYearMap[monthIndex];
+    if (this.isLeapYear() && monthIndex > 0) {
+        return ordinalDay + 1 + date;
+    }
+    else {
+        return ordinalDay + date;
+    }
+};
+Date.prototype.getWeekOfYear = function () {
+    var ordinalDay = this.getDayOfYear();
+    var weekday = this.getISOWeekday();
+    var adjustDay = ordinalDay - weekday + 10;
+    var week = adjustDay / 7;
+    // if week < 1; it's last year
+    // if week > 53; maybe it's next year
+    return Math.floor(week);
+};
+Date.prototype.toZeroTimeDate = function () {
+    return new Date(this.getFullYear(), this.getMonth(), this.getDate());
+};
+Date.prototype.isSameWeek = function (other) {
+    var d1 = this.toZeroTimeDate();
+    var weekday = this.getISOWeekday();
+    var monday = d1.dateByAddingDays(1 - weekday);
+    var nextMonday = d1.dateByAddingDays(7 - weekday + 1);
+    var time = other.getTime();
+    return time > monday.getTime() && time < nextMonday.getTime();
+};
 Date.prototype.isToday = function () {
     return new Date().isSameDate(this);
 };
 Date.prototype.isYesterday = function () {
     var yesterday = new Date().dateByAddingDays(-1);
     return this.isSameDate(yesterday);
+};
+Date.prototype.isLeapYear = function () {
+    return isLeapYear(this.getFullYear());
 };
 /**
  * 一月返回1， 8 月返回 8
