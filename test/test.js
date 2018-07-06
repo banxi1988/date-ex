@@ -125,25 +125,40 @@ describe("测试格式化类 日期扩展函数", () => {
     assert.equal(padNumber(11), "11");
     assert.equal(padNumber(10), "10");
   });
+
   it("should return yy-mm-dd", () => {
     const d1 = Date.create(2018, 6, 11);
     assert.equal(d1.toISODateString(), "2018-06-11");
+    const d2 = new Date("2018-07-06T00:13:12.976Z");
+    assert.strictEqual(d2.toISODateString(), "2018-07-06");
   });
+
   it("should return hh:mm:SS", () => {
     const d1 = Date.create(2018, 6, 11, 19, 9, 26);
     assert.equal(d1.toISOTimeString(), "19:09:26");
+    const d2 = new Date("2018-07-06T00:13:12.976Z");
+    assert.strictEqual(d2.toISOTimeString(), "08:13:12");
   });
+
   it("should return yy-mm-dd hh:mm:SS", () => {
     const d1 = Date.create(2018, 6, 11, 19, 9, 26);
     assert.equal(d1.toISODateTimeString(), "2018-06-11 19:09:26");
+    const d2 = new Date("2018-07-06T00:13:12.976Z");
+    assert.strictEqual(d2.toISODateTimeString(), "2018-07-06 08:13:12");
   });
+
   it("getMonthDayString", () => {
     const d1 = Date.create(2018, 6, 11, 19, 9, 26);
-    assert.equal("06-11", d1.getMonthDayString());
+    assert.strictEqual("06-11", d1.getMonthDayString());
+    const d2 = new Date("2018-07-06T00:13:12.976Z");
+    assert.strictEqual(d2.getMonthDayString(), "07-06");
   });
+
   it("getHourMinuteString", () => {
     const d1 = Date.create(2018, 6, 11, 19, 9, 26);
-    assert.equal("19:09", d1.getHourMinuteString());
+    assert.strictEqual("19:09", d1.getHourMinuteString());
+    const d2 = new Date("2018-07-06T00:13:12.976Z");
+    assert.strictEqual(d2.getHourMinuteString(), "08:13");
   });
 });
 
