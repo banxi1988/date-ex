@@ -1,6 +1,11 @@
 "use strict";
 const { assert } = require("chai");
-const { padNumber, isLeapYear } = require("../dist/index.js");
+const {
+  padNumber,
+  isLeapYear,
+  DateStyle,
+  TimeStyle
+} = require("../dist/index.js");
 
 describe("测试 Date 创建类扩展函数", () => {
   it("ceate", () => {
@@ -133,11 +138,25 @@ describe("测试格式化类 日期扩展函数", () => {
     assert.strictEqual(d2.toISODateString(), "2018-07-06");
   });
 
+  it("should return mm/dd", () => {
+    const d1 = Date.create(2018, 6, 11);
+    assert.equal(d1.toISODateString(DateStyle.md), "06/11");
+  });
+  it("should return yyyy/mm/dd", () => {
+    const d1 = Date.create(2018, 6, 11);
+    assert.equal(d1.toISODateString(DateStyle.ymd2), "2018/06/11");
+  });
+
   it("should return hh:mm:SS", () => {
     const d1 = Date.create(2018, 6, 11, 19, 9, 26);
     assert.equal(d1.toISOTimeString(), "19:09:26");
     const d2 = new Date("2018-07-06T00:13:12.976Z");
     assert.strictEqual(d2.toISOTimeString(), "08:13:12");
+  });
+
+  it("should return hh:mm", () => {
+    const d1 = Date.create(2018, 6, 11, 19, 9);
+    assert.equal(d1.toISOTimeString(TimeStyle.hm), "19:09");
   });
 
   it("should return yy-mm-dd hh:mm:SS", () => {

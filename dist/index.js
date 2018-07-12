@@ -1,6 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
+ * 时间风格
+ */
+var TimeStyle;
+(function (TimeStyle) {
+    /**
+     * 19:08 风格
+     */
+    TimeStyle[TimeStyle["hm"] = 0] = "hm";
+    /**
+     * 19:08:02 风格
+     */
+    TimeStyle[TimeStyle["hms"] = 1] = "hms";
+})(TimeStyle = exports.TimeStyle || (exports.TimeStyle = {}));
+/**
+ * 日期风格
+ */
+var DateStyle;
+(function (DateStyle) {
+    /**
+     * 09/02
+     */
+    DateStyle[DateStyle["md"] = 0] = "md";
+    /**
+     * 2018-09-02 风格
+     */
+    DateStyle[DateStyle["ymd"] = 1] = "ymd";
+    /**
+     * 2018/09/09 风格
+     */
+    DateStyle[DateStyle["ymd2"] = 2] = "ymd2";
+})(DateStyle = exports.DateStyle || (exports.DateStyle = {}));
+/**
  * 判断年份是否是闰年
  * @param year 年份
  */
@@ -135,17 +167,31 @@ Date.prototype.getRealMonth = function () {
     // JS 中的 month 是 从 0 开始的。
     return this.getMonth() + 1;
 };
-Date.prototype.toISODateString = function () {
+Date.prototype.toISODateString = function (dateStyle) {
+    if (dateStyle === void 0) { dateStyle = DateStyle.ymd; }
     var year = this.getFullYear();
-    var month = this.getMonth() + 1;
-    var day = this.getDate();
-    return year + "-" + padNumber(month) + "-" + padNumber(day);
+    var month = padNumber(this.getMonth() + 1);
+    var day = padNumber(this.getDate());
+    switch (dateStyle) {
+        case DateStyle.md:
+            return month + "/" + day;
+        case DateStyle.ymd:
+            return year + "-" + month + "-" + day;
+        case DateStyle.ymd2:
+            return year + "/" + month + "/" + day;
+    }
 };
-Date.prototype.toISOTimeString = function () {
+Date.prototype.toISOTimeString = function (timeStyle) {
+    if (timeStyle === void 0) { timeStyle = TimeStyle.hms; }
     var hour = this.getHours();
     var minute = this.getMinutes();
     var second = this.getSeconds();
-    return padNumber(hour) + ":" + padNumber(minute) + ":" + padNumber(second);
+    switch (timeStyle) {
+        case TimeStyle.hm:
+            return padNumber(hour) + ":" + padNumber(minute);
+        case TimeStyle.hms:
+            return (padNumber(hour) + ":" + padNumber(minute) + ":" + padNumber(second));
+    }
 };
 /**
  * 为个位数数字补充前缀 0,(负数除外),小数部分将舍去
@@ -163,8 +209,10 @@ function padNumber(num) {
     }
 }
 exports.padNumber = padNumber;
-Date.prototype.toISODateTimeString = function () {
-    return this.toISODateString() + " " + this.toISOTimeString();
+Date.prototype.toISODateTimeString = function (dateStyle, timeStyle) {
+    if (dateStyle === void 0) { dateStyle = DateStyle.ymd; }
+    if (timeStyle === void 0) { timeStyle = TimeStyle.hms; }
+    return (this.toISODateString(dateStyle) + " " + this.toISOTimeString(timeStyle));
 };
 Date.prototype.toRelativeDateTimeString = function () {
     var date = this;

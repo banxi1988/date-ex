@@ -10,6 +10,36 @@ export declare const enum TimeUnit {
     millisOfWeek = 604800000
 }
 /**
+ * 时间风格
+ */
+export declare enum TimeStyle {
+    /**
+     * 19:08 风格
+     */
+    hm = 0,
+    /**
+     * 19:08:02 风格
+     */
+    hms = 1
+}
+/**
+ * 日期风格
+ */
+export declare enum DateStyle {
+    /**
+     * 09/02
+     */
+    md = 0,
+    /**
+     * 2018-09-02 风格
+     */
+    ymd = 1,
+    /**
+     * 2018/09/09 风格
+     */
+    ymd2 = 2
+}
+/**
  * 判断年份是否是闰年
  * @param year 年份
  */
@@ -100,15 +130,16 @@ declare global {
         /**
          * 返回类似 2018-06-03 格式的日期字符串
          */
-        toISODateString(): string;
+        toISODateString(dateStyle?: DateStyle): string;
         /**
          * 返回类似 16:03:42 格式的日期字符串
          */
-        toISOTimeString(): string;
+        toISOTimeString(timeStyle?: TimeStyle): string;
         /**
          * 返回类似 2018-06-03 16:03:42 格式的时间字符串
+         * 也可以自定义格式
          */
-        toISODateTimeString(): string;
+        toISODateTimeString(dateStyle?: DateStyle, timeStyle?: TimeStyle): string;
         /**
          * 返回时分秒为0的对应日期
          */
