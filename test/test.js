@@ -277,6 +277,12 @@ describe("测试其他扩展属性", () => {
     const d7 = Date.create(2018, 1, 22);
     assert.strictEqual(d7.getWeekOfYear(), 4);
   });
+
+  it("getTimestamp", () => {
+    const t1 = 10;
+    const d1 = new Date(t1 * 1000);
+    assert.strictEqual(d1.getTimestamp(), t1);
+  });
 });
 
 describe("测试 padNumber 函数", () => {

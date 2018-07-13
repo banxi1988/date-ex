@@ -246,6 +246,9 @@ Date.prototype.toRelativeDateTimeString = function () {
         }
     }
 };
+Date.prototype.getTimestamp = function () {
+    return Math.round(this.getTime() / 1000);
+};
 Date.today = function () {
     return new Date();
 };

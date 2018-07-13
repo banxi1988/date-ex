@@ -148,6 +148,10 @@ declare global {
          * 返回类似微信风格相对时间字符串
          */
         toRelativeDateTimeString(): string;
+        /**
+         * 返回对应时间戳，单位秒
+         */
+        getTimestamp(): number;
     }
     interface DateConstructor {
         today(): Date;
