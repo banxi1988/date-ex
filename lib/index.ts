@@ -404,8 +404,8 @@ Date.prototype.toRelativeDateTimeString = function(): string {
         date.getHourMinuteString()
       );
     } else {
-      const str = date.toISODateTimeString();
-      return str.substring(0, str.length - 3);
+      const str = date.toISODateTimeString(DateStyle.ymd, TimeStyle.hm);
+      return str;
     }
   }
 };

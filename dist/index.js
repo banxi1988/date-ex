@@ -241,8 +241,8 @@ Date.prototype.toRelativeDateTimeString = function () {
                 date.getHourMinuteString());
         }
         else {
-            var str = date.toISODateTimeString();
-            return str.substring(0, str.length - 3);
+            var str = date.toISODateTimeString(DateStyle.ymd, TimeStyle.hm);
+            return str;
         }
     }
 };
